@@ -1,10 +1,13 @@
-import express from "express";
+const express = require("express");
+const mongoose = require("mongoose");
+const { Book } = require("../models/BookModel.js");
+
 const router = express.Router();
 
-//route for save a bew book
-router.post("/books", async (request, response) => {
+//route for save a new book
+router.post("/", async (request, response) => {
     try {
-        if (mongoose.connection.readyState !== 1) {
+        if (Book.db.readyState !== 1) {
             return response.status(503).send({ message: "Database is not connected" });
         }
 
@@ -32,9 +35,9 @@ router.post("/books", async (request, response) => {
 });
 
 // Route for get all book from datase 
-router.get("/books", async (request, response) => {
+router.get("/", async (request, response) => {
     try {
-        if (mongoose.connection.readyState !== 1) {
+        if (Book.db.readyState !== 1) {
             return response.status(503).send({ message: "Database is not connected" });
         }
 
@@ -51,9 +54,9 @@ router.get("/books", async (request, response) => {
 });
 
 // Route for get all book from datase by id
-router.get("/books/:id", async (request, response) => {
+router.get("/:id", async (request, response) => {
     try {
-        if (mongoose.connection.readyState !== 1) {
+        if (Book.db.readyState !== 1) {
             return response.status(503).send({ message: "Database is not connected" });
         }
 
@@ -76,9 +79,9 @@ router.get("/books/:id", async (request, response) => {
 });
 
 //Route for update a book
-router.put("/books/:id",async (request,response) => {
+router.put("/:id",async (request,response) => {
     try{
-        if (mongoose.connection.readyState !== 1) {
+        if (Book.db.readyState !== 1) {
             return response.status(503).send({ message: "Database is not connected" });
         }
 
@@ -119,7 +122,7 @@ router.put("/books/:id",async (request,response) => {
 });
 
 //route delete a book
-router.delete("/books/:id", async(request,respond) =>{
+router.delete("/:id", async(request,respond) =>{
     try{
 
         const {id} = request.params;
@@ -138,6 +141,4 @@ router.delete("/books/:id", async(request,respond) =>{
     }
 })
 
-router.listen(PORT, () => {
-    console.log(`app is listening to port: ${PORT}`);
-});
+module.exports = router;
